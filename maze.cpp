@@ -35,7 +35,7 @@ Cell Maze::GetWall(Cell cell, Direction dir) {
 }
 
 void Maze::Display() {
-  for (int row = 0; row < 2*num_rows_+1; row++) {
+  for (int row = 2*num_rows_; row >= 0; row--) {
     for (int col = 0; col < 2*num_cols_+1; col++) {
       char symbol = (cells_[row][col] == false) ? ' ' : '#';
       std::cout << symbol << symbol;
@@ -54,10 +54,8 @@ bool Maze::CloseWall (int row, int col, Direction dir) {
 	}
 
 	// If cell border is also the external border of the maze, return false.
-	if (wall.row >= 2*num_rows_+1 || wall.row <= 0
-			|| wall.col >= 2*num_cols_+1 || wall.col <= 0) {
+	if (IsOuterWall(wall))
 		return false;
-	}
 
 	cells_[wall.row][wall.col] = true;
 	
@@ -72,12 +70,10 @@ bool Maze::OpenWall (int row, int col, Direction dir) {
 	if (wall.row == -1 || wall.col == -1) {
 		return false;
 	}
-
+	
 	// If cell border is also the external border of the maze, return false.
-	if (wall.row >= 2*num_rows_+1 || wall.row <= 0
-			|| wall.col >= 2*num_cols_+1 || wall.col <= 0) {
+	if (IsOuterWall(wall))
 		return false;
-	}
 
 	cells_[wall.row][wall.col] = false;
 	

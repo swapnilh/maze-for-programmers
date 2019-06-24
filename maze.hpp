@@ -35,6 +35,14 @@ class Maze {
 	// Returns the "dir"-side wall of the input cell.
 	Cell GetWall(Cell cell, Direction dir);
 	
+	// Is the cell part of the outer wall of the maze?
+	bool IsOuterWall(Cell cell) {
+		if (cell.row >= 2*num_rows_ || cell.row <= 0
+				|| cell.col >= 2*num_cols_ || cell.col <= 0) {
+			return true;
+		}
+		return false;
+	}
   
 public:
   Maze(int num_rows, int num_cols) :
