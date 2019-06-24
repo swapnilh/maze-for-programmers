@@ -2,15 +2,15 @@
 #include "maze.hpp"
 
 Cell Maze::GetWall(Cell cell, Direction dir) {
-	int actual_row = 2*cell.row + 1;
-	int actual_col = 2*cell.col + 1;
-
-	if (actual_row >= num_rows_ || actual_row < 0
-			|| actual_col >= num_cols_ || actual_col < 0) {
+	if (cell.row >= num_rows_ || cell.row < 0
+			|| cell.col >= num_cols_ || cell.col < 0) {
 		std::cerr << "Cell dimensions incorrect: ["
 			<< cell.row  << "," << cell.col << "]" << std::endl;
 		return  {-1, -1};
 	}
+
+	int actual_row = 2*cell.row + 1;
+	int actual_col = 2*cell.col + 1;
 
 	switch (dir) {
 		case Direction::North:
@@ -35,8 +35,8 @@ Cell Maze::GetWall(Cell cell, Direction dir) {
 }
 
 void Maze::Display() {
-  for (int row = 0; row < num_rows_; row++) {
-    for (int col = 0; col < num_cols_; col++) {
+  for (int row = 0; row < 2*num_rows_+1; row++) {
+    for (int col = 0; col < 2*num_cols_+1; col++) {
       char symbol = (cells_[row][col] == false) ? ' ' : '#';
       std::cout << symbol << symbol;
     }
@@ -54,8 +54,8 @@ bool Maze::CloseWall (int row, int col, Direction dir) {
 	}
 
 	// If cell border is also the external border of the maze, return false.
-	if (wall.row >= num_rows_ || wall.row <= 0
-			|| wall.col >= num_cols_ || wall.col <= 0) {
+	if (wall.row >= 2*num_rows_+1 || wall.row <= 0
+			|| wall.col >= 2*num_cols_+1 || wall.col <= 0) {
 		return false;
 	}
 
@@ -74,8 +74,8 @@ bool Maze::OpenWall (int row, int col, Direction dir) {
 	}
 
 	// If cell border is also the external border of the maze, return false.
-	if (wall.row >= num_rows_ || wall.row <= 0
-			|| wall.col >= num_cols_ || wall.col <= 0) {
+	if (wall.row >= 2*num_rows_+1 || wall.row <= 0
+			|| wall.col >= 2*num_cols_+1 || wall.col <= 0) {
 		return false;
 	}
 
