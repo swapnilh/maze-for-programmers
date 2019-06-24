@@ -2,6 +2,7 @@
 #include <cassert>
 #include "maze.hpp"
 #include "binary_tree.hpp"
+#include "sidewinder.hpp"
 
 int main () {
   Maze basicTwo(2, 2);
@@ -25,6 +26,16 @@ int main () {
 	BinaryTreeCreator bt(basicFive);
 	bt.Generate();
   basicFive.Display();
+
+	std::cout << "Resetting the maze" << std::endl;
+  basicFive.Reset();
+
+	std::cout << "Generating a perfect maze using sidewinder algorithm"
+					  << std::endl;
+	SidewinderCreator sw(basicFive);
+	sw.Generate();
+  basicFive.Display();
+
   return 0;
 }
 
