@@ -79,3 +79,18 @@ bool Maze::OpenWall (int row, int col, Direction dir) {
 	
 	return true;
 }
+
+void Maze::Reset () {
+	// Closing all east-west walls.
+	for (int row = 0; row < 2*num_rows_+1; row+=2) {
+		for (int col = 0; col < 2*num_cols_+1; col++) {
+			cells_[row][col] = true;
+		}
+	}
+	// Closing all north-south walls.
+	for (int col = 0; col < 2*num_cols_+1; col+=2) {
+		for (int row = 0; row < 2*num_rows_+1; row++) {
+			cells_[row][col] = true;
+		}
+	}
+}

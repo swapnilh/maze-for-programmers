@@ -48,20 +48,7 @@ public:
   Maze(int num_rows, int num_cols) :
     num_rows_(num_rows), num_cols_(num_cols),
     cells_(2*num_rows+1, std::vector<bool>(2*num_cols+1, false)) {
-
-    // Closing all east-west walls.
-    for (int row = 0; row < 2*num_rows_+1; row+=2) {
-      for (int col = 0; col < 2*num_cols_+1; col++) {
-        cells_[row][col] = true;
-      }
-    }
-    // Closing all north-south walls.
-    for (int col = 0; col < 2*num_cols_+1; col+=2) {
-      for (int row = 0; row < 2*num_rows_+1; row++) {
-        cells_[row][col] = true;
-      }
-    }
-
+		Reset();
   }
 	
 	int GetNumRows () {
@@ -83,6 +70,9 @@ public:
 	// Open the "dir"-side border of the cell at [row, col].
 	// Note that we only use scaled cell coordinates internally.
 	bool OpenWall (int row, int col, Direction dir);
+
+	// Close all walls of the maze.
+	void Reset ();
 
 };
 
