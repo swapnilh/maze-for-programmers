@@ -1,6 +1,6 @@
 CC = g++
 CPPFLAGS = -Wall -std=c++11 
-DEPS = maze.hpp
+DEPS = maze.hpp binary_tree.hpp
 OBJ = maze.o test.o
 TARGET = maze
 #RM = rm -rf
