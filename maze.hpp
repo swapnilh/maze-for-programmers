@@ -2,6 +2,21 @@
 #define MAZE_HPP
 
 #include<vector>
+#include<tuple>
+
+enum class Direction {
+	North,
+	East,
+	West,
+	South
+};
+
+struct Cell {
+	int row;
+	int col;
+
+	Cell (int row_in, int col_in) : row(row_in), col(col_in) {}
+};
 
 // The M x N maze is represented as 2M+1 x 2N+1 as walls are stored as cells.
 // All odd indices are real cells, even indices are walls (open or closed).
@@ -12,6 +27,10 @@ class Maze {
   // odd indices cannot be closed as they are real cells. 
   // TODO: store only walls and not cells.
   std::vector<std::vector<bool> > cells_; 
+
+	// Returns the "dir"-side wall of the input cell.
+	Cell GetWall(Cell cell, Direction dir);
+	
   
 public:
   Maze(int num_rows, int num_cols) :
@@ -32,8 +51,17 @@ public:
     }
 
   }
-
+	
+	// ASCII-based display of the maze	
   void Display();
+
+	// Close the "dir"-side border of the cell at [row, col].
+	// Note that we only use scaled cell coordinates internally.
+	bool CloseWall (int row, int col, Direction dir);
+
+	// Open the "dir"-side border of the cell at [row, col].
+	// Note that we only use scaled cell coordinates internally.
+	bool OpenWall (int row, int col, Direction dir);
 
 };
 
