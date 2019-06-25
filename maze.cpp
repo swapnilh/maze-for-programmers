@@ -54,7 +54,7 @@ bool Maze::CloseWall (int row, int col, Direction dir) {
 	}
 
 	// If cell border is also the external border of the maze, return false.
-	if (IsOuterWall(wall))
+	if (IsInvalid(wall))
 		return false;
 
 	cells_[wall.row][wall.col] = true;
@@ -72,7 +72,7 @@ bool Maze::OpenWall (int row, int col, Direction dir) {
 	}
 	
 	// If cell border is also the external border of the maze, return false.
-	if (IsOuterWall(wall))
+	if (IsInvalid(wall))
 		return false;
 
 	cells_[wall.row][wall.col] = false;

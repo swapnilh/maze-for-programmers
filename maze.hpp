@@ -16,6 +16,8 @@ struct Cell {
 	int col;
 
 	Cell (int row_in, int col_in) : row(row_in), col(col_in) {}
+	
+	//TODO: GetNeighbor functions.
 };
 
 // The M x N maze is represented as 2M+1 x 2N+1 as walls are stored as cells.
@@ -34,16 +36,7 @@ class Maze {
 
 	// Returns the "dir"-side wall of the input cell.
 	Cell GetWall(Cell cell, Direction dir);
-	
-	// Is the cell part of the outer wall of the maze?
-	bool IsOuterWall(Cell cell) {
-		if (cell.row >= 2*num_rows_ || cell.row <= 0
-				|| cell.col >= 2*num_cols_ || cell.col <= 0) {
-			return true;
-		}
-		return false;
-	}
-  
+
 public:
   Maze(int num_rows, int num_cols) :
     num_rows_(num_rows), num_cols_(num_cols),
@@ -60,6 +53,20 @@ public:
 		return num_cols_;
 	}
 
+	// Identifies invalid cells, including those on the outer edge of maze.
+	bool IsInvalid(Cell cell) {
+		if (cell.row >= 2*num_rows_ || cell.row <= 0
+				|| cell.col >= 2*num_cols_ || cell.col <= 0) {
+			return true;
+		}
+		return false;
+	}
+ 
+	// Resolve internal vs external coordinates.
+	bool IsClosed(Cell cell) {
+		return cells_[cell.row][cell.col];
+	}
+ 
 	// ASCII-based display of the maze	
   void Display();
 
