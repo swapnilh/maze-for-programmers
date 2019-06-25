@@ -24,10 +24,10 @@ class DijkstraSolver {
 
 		flood_fill_[cell.row][cell.col] = distance;
 
-		SolveHelper({cell.row+1, cell.col}, distance+1);
-		SolveHelper({cell.row-1, cell.col}, distance+1);
-		SolveHelper({cell.row, cell.col+1}, distance+1);
-		SolveHelper({cell.row, cell.col-1}, distance+1);
+		auto neighbors = cell.GetNeighbors();
+		for (auto neighbor : neighbors) {
+			SolveHelper(neighbor, distance+1);
+		}
 	}
 	
 	// Makes all cells on the path = 0
@@ -43,10 +43,10 @@ class DijkstraSolver {
 		int curr_distance = flood_fill_[cell.row][cell.col];
 		if (curr_distance >=0 && curr_distance <= distance) {
 			flood_fill_[cell.row][cell.col] = 0;
-			if (!TracePath({cell.row+1, cell.col}, curr_distance)) {
-				if (!TracePath({cell.row-1, cell.col}, curr_distance)) {
-					if (!TracePath({cell.row, cell.col+1}, curr_distance)) {
-						if (!TracePath({cell.row, cell.col-1}, curr_distance)) {
+			if (!TracePath(cell.GetNeighbor(Direction::North), curr_distance)) {
+				if (!TracePath(cell.GetNeighbor(Direction::South), curr_distance)) {
+					if (!TracePath(cell.GetNeighbor(Direction::East), curr_distance)) {
+						if (!TracePath(cell.GetNeighbor(Direction::West), curr_distance)) {
 						}
 					}
 				}

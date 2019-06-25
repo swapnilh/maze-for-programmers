@@ -9,29 +9,9 @@ Cell Maze::GetWall(Cell cell, Direction dir) {
 		return  {-1, -1};
 	}
 
-	int actual_row = 2*cell.row + 1;
-	int actual_col = 2*cell.col + 1;
+	Cell actual_cell = {2*cell.row + 1, 2*cell.col + 1};
 
-	switch (dir) {
-		case Direction::North:
-			actual_row += 1;
-			break;
-		case Direction::East:
-			actual_col += 1;
-			break;
-		case Direction::West:
-			actual_col -= 1;
-			break;
-		case Direction::South:
-			actual_row -= 1;
-			break;
-		default:
-			std::cerr << "Illegal Direction encountered" << std::endl;
-			return {-1, -1};
-	}
-
-	return {actual_row, actual_col};
-
+	return actual_cell.GetNeighbor(dir);
 }
 
 void Maze::Display() {

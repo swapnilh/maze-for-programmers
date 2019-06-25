@@ -2,7 +2,6 @@
 #define MAZE_HPP
 
 #include<vector>
-#include<tuple>
 
 enum class Direction {
 	North,
@@ -14,10 +13,37 @@ enum class Direction {
 struct Cell {
 	int row;
 	int col;
-
-	Cell (int row_in, int col_in) : row(row_in), col(col_in) {}
+	Cell (int row_in, int col_in) : row(row_in), col(col_in) {
+	}
 	
-	//TODO: GetNeighbor functions.
+	Cell GetNeighbor(Direction dir) {
+		switch (dir) {
+			case Direction::North:
+				return {row+1, col};
+				break;
+			case Direction::East:
+				return {row, col+1};
+				break;
+			case Direction::West:
+				return {row, col-1};
+				break;
+			case Direction::South:
+				return {row-1, col};
+				break;
+			default:
+				return {-1, -1};
+		}
+	}
+
+	// We need both associative and iterative access to neighbors. 
+		std::vector<Cell>	GetNeighbors () {
+		std::vector<Cell> neighbor_list;
+		neighbor_list.push_back(GetNeighbor(Direction::North));
+		neighbor_list.push_back(GetNeighbor(Direction::East));
+		neighbor_list.push_back(GetNeighbor(Direction::West));
+		neighbor_list.push_back(GetNeighbor(Direction::South));
+		return neighbor_list;
+	}
 };
 
 // The M x N maze is represented as 2M+1 x 2N+1 as walls are stored as cells.
