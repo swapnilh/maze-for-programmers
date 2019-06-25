@@ -20,7 +20,7 @@ int main () {
 	assert(!basicTwo.OpenWall(1, 1, Direction::North));
   basicTwo.Display();
 
-  Maze basicFive(5, 5);
+  Maze basicFive(10, 10);
   basicTwo.Display();
 	std::cout << "Generating a perfect maze using binary_tree algorithm"
 					  << std::endl;
