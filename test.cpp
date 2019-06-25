@@ -3,6 +3,7 @@
 #include "maze.hpp"
 #include "binary_tree.hpp"
 #include "sidewinder.hpp"
+#include "dijkstra.hpp"
 
 int main () {
   Maze basicTwo(2, 2);
@@ -36,6 +37,9 @@ int main () {
 	sw.Generate();
   basicFive.Display();
 
+	std::cout << "Solving the maze using djikstra's algorithm" << std::endl;
+	DijkstraSolver dj(basicFive);
+	dj.Solve();
   return 0;
 }
 
