@@ -18,9 +18,6 @@ class Maze {
   // odd indices cannot be closed as they are real cells. 
   // TODO: store only walls and not cells.
   std::vector<std::vector<Cell*> > cells_; 
-	
-	// Represents any cell outside the grid.
-	static Cell null_cell_;
 
 public:
   Maze(int num_rows, int num_cols) :
