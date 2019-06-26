@@ -1,76 +1,93 @@
 #include <iostream>
 #include "maze.hpp"
 
-Cell Maze::GetWall(Cell cell, Direction dir) {
-	if (cell.row >= num_rows_ || cell.row < 0
-			|| cell.col >= num_cols_ || cell.col < 0) {
-		std::cerr << "Cell dimensions incorrect: ["
-			<< cell.row  << "," << cell.col << "]" << std::endl;
-		return  {-1, -1};
-	}
+Cell Maze::null_cell_ = {-1, -1};
 
-	Cell actual_cell = {2*cell.row + 1, 2*cell.col + 1};
-
-	return actual_cell.GetNeighbor(dir);
+void Maze::DebugDisplay() {
+		for (int row = 0; row < num_rows_; row++)
+			for (int col = 0; col < num_cols_; col++) 
+				cells_[row][col]->PrintCell();
 }
 
 void Maze::Display() {
-  for (int row = 2*num_rows_; row >= 0; row--) {
-    for (int col = 0; col < 2*num_cols_+1; col++) {
-      char symbol = (cells_[row][col] == false) ? ' ' : '#';
-      std::cout << symbol << symbol;
+  for (int row = num_rows_-1; row >= 0; row--) { 
+		// Print north wall
+    for (int col = 0; col < num_cols_; col++) {
+			Cell* cell = cells_[row][col];	
+			Cell* neighbor = cell->GetNeighbor(Direction::North);
+			std::cout << "+";
+			// If neighbor does not exist or is blocked off, display wall.
+			if (*neighbor == null_cell_ || !cell->Linked(neighbor)) {
+				std::cout << "---";
+			} else {
+				std::cout << "   ";
+			}	
     }
-    std::cout << std::endl;
+		std::cout << "+" << std::endl;
+		// Print west wall
+    for (int col = 0; col < num_cols_; col++) {
+			Cell* cell = cells_[row][col];	
+			Cell* neighbor = cell->GetNeighbor(Direction::West);
+			// If neighbor does not exist or is blocked off, display wall.
+			if (*neighbor == null_cell_ || !cell->Linked(neighbor)) {
+				std::cout << "|";
+			} else {
+				std::cout << " ";
+			}
+			if (cell->starred)
+				std::cout << " * ";
+			else	
+				std::cout << "   ";
+    }
+		std::cout << "|" << std::endl;
   }
+	// Print South wall
+	for (int col = 0; col < num_cols_; col++) {
+			std::cout << "+---";
+	}
+ 	std::cout << "+" << std::endl;
 }
 
-bool Maze::CloseWall (int row, int col, Direction dir) {
+bool Maze::Unlink (int row, int col, Direction dir) {
+	Cell* cell = cells_[row][col];
+	Cell* neighbor = cell->GetNeighbor(dir) ;
 	
-	Cell wall = GetWall({row, col}, dir);
-	
-	// If any error in input, return false.
-	if (wall.row == -1 || wall.col == -1) {
+	// If neighbor does not exist	
+	if (*neighbor == null_cell_) {
 		return false;
 	}
-
-	// If cell border is also the external border of the maze, return false.
-	if (IsInvalid(wall))
-		return false;
-
-	cells_[wall.row][wall.col] = true;
+	
+	cell->UnlinkCell(neighbor);
 	
 	return true;
 }
 
-bool Maze::OpenWall (int row, int col, Direction dir) {
-	
-	Cell wall = GetWall({row, col}, dir);
-	
-	// If any error in input, return false.
-	if (wall.row == -1 || wall.col == -1) {
+bool Maze::Link (int row, int col, Direction dir) {
+	Cell* cell = cells_[row][col];
+	Cell* neighbor = cell->GetNeighbor(dir) ;
+
+	// If neighbor does not exist	
+	if (*neighbor == null_cell_) {
 		return false;
 	}
 	
-	// If cell border is also the external border of the maze, return false.
-	if (IsInvalid(wall))
-		return false;
-
-	cells_[wall.row][wall.col] = false;
+	cell->LinkCell(neighbor);
 	
 	return true;
 }
 
 void Maze::Reset () {
-	// Closing all east-west walls.
-	for (int row = 0; row < 2*num_rows_+1; row+=2) {
-		for (int col = 0; col < 2*num_cols_+1; col++) {
-			cells_[row][col] = true;
-		}
-	}
-	// Closing all north-south walls.
-	for (int col = 0; col < 2*num_cols_+1; col+=2) {
-		for (int row = 0; row < 2*num_rows_+1; row++) {
-			cells_[row][col] = true;
+	for (int row = 0; row < num_rows_; row++) {
+		for (int col = 0; col < num_cols_; col++) {
+			auto* cell = cells_[row][col];
+			cell->north_cell = (IsInvalid(row+1, col))? &null_cell_ : cells_[row+1][col];
+			cell->east_cell =  (IsInvalid(row, col+1))? &null_cell_ : cells_[row][col+1];
+			cell->west_cell =  (IsInvalid(row, col-1))? &null_cell_ : cells_[row][col-1];
+			cell->south_cell = (IsInvalid(row-1, col))? &null_cell_ : cells_[row-1][col];
+			cell->UnlinkCell(cell->north_cell);
+			cell->UnlinkCell(cell->east_cell);
+			cell->UnlinkCell(cell->west_cell);
+			cell->UnlinkCell(cell->south_cell);
 		}
 	}
 }

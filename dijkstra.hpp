@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <deque>
 #include "maze.hpp"
 	
 class DijkstraSolver {
@@ -11,51 +12,43 @@ class DijkstraSolver {
 	// -1 for unvisited, -2 for blocked, else distance from source.
 	std::vector<std::vector<int> > flood_fill_;
 
-	void SolveHelper(Cell cell, int distance) {
+	void SolveHelper(int row, int col, int distance) {
 		// Return if invalid cell or already visited.
-		if (maze_.IsInvalid(cell) || flood_fill_[cell.row][cell.col] != -1)
+		if (maze_.IsInvalid(row, col) || flood_fill_[row][col] != -1)
 			return;
 
-		// Mark blocked if appropriate.
-		if (maze_.IsClosed(cell)) {
-				flood_fill_[cell.row][cell.col] = -2;
-				return;
-		}
+		flood_fill_[row][col] = distance;
 
-		flood_fill_[cell.row][cell.col] = distance;
-
-		auto neighbors = cell.GetNeighbors();
+		auto* const current_cell = maze_.GetCell(row, col);
+		auto neighbors = current_cell->GetNeighbors();
 		for (auto neighbor : neighbors) {
-			SolveHelper(neighbor, distance+1);
+			if (current_cell->Linked(neighbor))
+				SolveHelper(neighbor->row, neighbor->col, distance+1);
 		}
 	}
+
+	// "Star"s all cells on shortest path from source to target
+	// once flood_fill_ is populated.	
+	void TracePath(Cell* source, Cell* target) {
+		if (source == nullptr || target == nullptr) 
+			return;
 	
-	// Makes all cells on the path = 0
-	bool TracePath(Cell cell, int distance) {
-		if (maze_.IsInvalid(cell)) 
-			return false;
+		source->starred = true;
+		auto* current_cell = source; 
 
-		if (flood_fill_[cell.row][cell.col] == -2
-				 || flood_fill_[cell.row][cell.col] == 0) {
-			return false;
-		}		
-
-		int curr_distance = flood_fill_[cell.row][cell.col];
-		if (curr_distance >=0 && curr_distance <= distance) {
-			flood_fill_[cell.row][cell.col] = 0;
-			if (!TracePath(cell.GetNeighbor(Direction::North), curr_distance)) {
-				if (!TracePath(cell.GetNeighbor(Direction::South), curr_distance)) {
-					if (!TracePath(cell.GetNeighbor(Direction::East), curr_distance)) {
-						if (!TracePath(cell.GetNeighbor(Direction::West), curr_distance)) {
-						}
+		while(current_cell != target) {
+			auto neighbors = current_cell->GetNeighbors();
+			for (auto* neighbor : neighbors) {
+				if (current_cell->Linked(neighbor)) {
+					if (flood_fill_[neighbor->row][neighbor->col]
+							< flood_fill_[current_cell->row][current_cell->col]) {
+						current_cell = neighbor;
+						break;
 					}
 				}
 			}
-		  return true;
-		}
-		else {
-			return false;
-		}
+			current_cell->starred = true;
+		}	
 	}
 
 	void Print() {
@@ -69,28 +62,17 @@ class DijkstraSolver {
 
 public:
 	DijkstraSolver (Maze& maze) : 
-		maze_(maze), flood_fill_(2*maze_.GetNumRows()+1,
-														 std::vector<int>(2*maze_.GetNumCols()+1, -1)) 
+		maze_(maze), flood_fill_(maze_.GetNumRows(),
+														 std::vector<int>(maze_.GetNumCols(), -1)) 
 	{}
 
 	// Finds a path from the NW corner to the SE corner.
 	void Solve() {
-		Cell nw_corner {2*maze_.GetNumRows()-1, 1};
-		Cell se_corner {1, 2*maze_.GetNumCols()-1};
-		SolveHelper(nw_corner, 0);
-		TracePath(se_corner, flood_fill_[se_corner.row][se_corner.col]+1);
-		DisplayPath();
-	}
-
-	void DisplayPath() {
-		for (int row = 2*maze_.GetNumRows(); row >= 0; row--) {
-			for (int col = 0; col < 2*maze_.GetNumCols()+1; col++) {
-				char symbol =  (flood_fill_[row][col] == 0) ? '.'
-										 : ((flood_fill_[row][col] > 0) ? ' ' : '#');
-				std::cout << symbol << symbol;
-			}
-			std::cout << std::endl;
-		}
+		Cell* const nw_corner = maze_.GetCell(maze_.GetNumRows()-1, 0);
+		Cell* const se_corner = maze_.GetCell(0, maze_.GetNumCols()-1);
+		SolveHelper(nw_corner->row, nw_corner->col, 0);
+		TracePath(se_corner, nw_corner);
+		maze_.Display();
 	}
 
 };

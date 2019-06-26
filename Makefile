@@ -1,7 +1,7 @@
 CC = g++
 CPPFLAGS = -Wall -std=c++11 -ggdb 
-DEPS = maze.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp
-OBJ = maze.o test.o
+DEPS = cell.hpp util.hpp maze.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp 
+OBJ = maze.o test.o cell.o
 TARGET = maze
 #RM = rm -rf
 RM = rm -rf 

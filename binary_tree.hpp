@@ -23,11 +23,11 @@ public:
 				int rand_int = dist2(rng_);
 
 				if (rand_int == 1) { // Open North Wall if possible, else East.
-					if (!maze_.OpenWall(row, col, Direction::North)) 
-						maze_.OpenWall(row, col, Direction::East);
+					if (!maze_.Link(row, col, Direction::North)) 
+						maze_.Link(row, col, Direction::East);
 				} else {
-					if (!maze_.OpenWall(row, col, Direction::East)) 
-						maze_.OpenWall(row, col, Direction::North);
+					if (!maze_.Link(row, col, Direction::East)) 
+						maze_.Link(row, col, Direction::North);
 				}
 			}
 		}
