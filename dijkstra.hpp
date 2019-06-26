@@ -66,6 +66,14 @@ public:
 														 std::vector<int>(maze_.GetNumCols(), -1)) 
 	{}
 
+	void Reset() {
+		for (int row = 0; row < maze_.GetNumRows(); row++) {
+			for (int col = 0; col < maze_.GetNumCols(); col++) {
+				flood_fill_[row][col] = -1;
+			}
+		}
+	}
+
 	// Finds a path from the NW corner to the SE corner.
 	void Solve() {
 		Cell* const nw_corner = maze_.GetCell(maze_.GetNumRows()-1, 0);
