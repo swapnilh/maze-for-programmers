@@ -41,4 +41,7 @@ inline bool operator==(const Cell& lhs, const Cell& rhs) {
 	return (lhs.row == rhs.row) && (lhs.col == rhs.col);
 }
 
+inline int HashCell (Cell* cell, int num_cols) {
+	return cell->row*num_cols + cell->col;
+}
 #endif // CELL_HPP

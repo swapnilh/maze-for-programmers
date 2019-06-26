@@ -4,6 +4,7 @@
 #include "binary_tree.hpp"
 #include "sidewinder.hpp"
 #include "dijkstra.hpp"
+#include "aldous_broder.hpp"
 
 int main () {
   Maze basicTwo(2, 2);
@@ -30,5 +31,20 @@ int main () {
 	std::cout << "Solving the maze using djikstra's algorithm" << std::endl;
 	DijkstraSolver dj(basicFive);
 	dj.Solve();
+
+	std::cout << "Resetting the maze" << std::endl;
+  basicFive.Reset();
+
+	std::cout << "Generating a perfect maze using aldous-broder algorithm"
+					  << std::endl;
+	AldousBroderCreator ab(basicFive);
+	ab.Generate();
+  basicFive.Display();
+
+	std::cout << "Solving the maze using djikstra's algorithm" << std::endl;
+	dj.Reset();
+	dj.Solve();
+
+
   return 0;
 }
