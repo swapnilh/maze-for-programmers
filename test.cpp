@@ -17,7 +17,7 @@ int main () {
   basicFive.Display();
 	std::cout << "Generating a perfect maze using binary_tree algorithm"
 					  << std::endl;
-	BinaryTreeCreator bt(basicFive);
+	BinaryTreeGenerator bt(basicFive);
 	bt.Generate();
   basicFive.Display();
 	std::cout << "Deadend Cells:" << basicFive.GetDeadendCells().size()
@@ -28,7 +28,7 @@ int main () {
 
 	std::cout << "Generating a perfect maze using sidewinder algorithm"
 					  << std::endl;
-	SidewinderCreator sw(basicFive);
+	SidewinderGenerator sw(basicFive);
 	sw.Generate();
   basicFive.Display();
 	std::cout << "Deadend Cells:" << basicFive.GetDeadendCells().size()
@@ -39,7 +39,7 @@ int main () {
 
 	std::cout << "Generating a perfect maze using aldous-broder algorithm"
 					  << std::endl;
-	AldousBroderCreator ab(basicFive);
+	AldousBroderGenerator ab(basicFive);
 	ab.Generate();
   basicFive.Display();
 	std::cout << "Deadend Cells:" << basicFive.GetDeadendCells().size()
@@ -50,7 +50,7 @@ int main () {
 
 	std::cout << "Generating a perfect maze using hunt-and-kill algorithm"
 					  << std::endl;
-	HuntAndKillCreator hk(basicFive);
+	HuntAndKillGenerator hk(basicFive);
 	hk.Generate();
   basicFive.Display();
 	std::cout << "Deadend Cells:" << basicFive.GetDeadendCells().size()
