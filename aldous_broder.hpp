@@ -2,20 +2,15 @@
 #define ALDOUS_BRODER_HPP
 
 #include <iostream>
-#include <random>
 #include <unordered_set>
-#include <tuple>
-#include "maze.hpp"
+#include "maze_generator.hpp"
 	
-class AldousBroderCreator {
-	Maze& maze_;
-	std::mt19937 rng_;
-	
+class AldousBroderGenerator: public MazeGenerator {
 public:
-	AldousBroderCreator (Maze& maze) : maze_(maze), rng_((std::random_device())())
-	{}
+	AldousBroderGenerator (Maze& maze) : MazeGenerator(maze, "AldousBroder")
+		{}
 
-	void Generate() {
+	void Generate() override {
 		unsigned int num_cells = maze_.GetNumRows() * maze_.GetNumCols();
 		int num_cols = maze_.GetNumCols();
 
@@ -59,7 +54,6 @@ public:
 			current_cell = next_cell;
 		}
 	}
-
 };
 
 #endif // ALDOUS_BRODER_HPP

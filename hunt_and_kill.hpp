@@ -2,21 +2,16 @@
 #define HUNT_AND_KILL_HPP
 
 #include <iostream>
-#include <random>
 #include <cassert>
 #include <unordered_set>
-#include <tuple>
-#include "maze.hpp"
+#include "maze_generator.hpp"
 	
-class HuntAndKillCreator {
-	Maze& maze_;
-	std::mt19937 rng_;
-	
+class HuntAndKillGenerator: public MazeGenerator {
 public:
-	HuntAndKillCreator (Maze& maze) : maze_(maze), rng_((std::random_device())())
-	{}
+	HuntAndKillGenerator (Maze& maze) : MazeGenerator(maze, "HuntAndKill")
+		{}
 
-	void Generate() {
+	void Generate() override {
 		unsigned int num_cells = maze_.GetNumRows() * maze_.GetNumCols();
 		int num_cols = maze_.GetNumCols();
 

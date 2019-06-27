@@ -2,19 +2,14 @@
 #define BINARY_TREE_HPP
 
 #include <iostream>
-#include <random>
-#include "maze.hpp"
+#include "maze_generator.hpp"
 	
-class BinaryTreeCreator {
-	Maze& maze_;
-	std::mt19937 rng_;
-	
+class BinaryTreeGenerator: public MazeGenerator {
 public:
-	BinaryTreeCreator (Maze& maze) : maze_(maze), rng_((std::random_device())())
-	{
-	}
+	BinaryTreeGenerator (Maze& maze) : MazeGenerator(maze, "BinaryTree")
+		{}
 
-	void Generate() {
+	void Generate() override {
 		// Generates random integers from the set [1, 2].
     std::uniform_int_distribution<int> dist2(1,2);
 
