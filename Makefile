@@ -1,6 +1,6 @@
 CC = g++
 CPPFLAGS = -Wall -std=c++11 -ggdb# -DDEBUG 
-DEPS = cell.hpp util.hpp maze.hpp maze_generator.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp aldous_broder.hpp hunt_and_kill.hpp 
+DEPS = cell.hpp util.hpp maze.hpp maze_generator.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp aldous_broder.hpp hunt_and_kill.hpp recursive_backtrack.hpp 
 OBJ = maze.o cell.o
 TARGET = test deadend_stats
 #RM = rm -rf
