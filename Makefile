@@ -2,7 +2,7 @@ CC = g++
 CPPFLAGS = -Wall -std=c++11 -ggdb# -DDEBUG 
 DEPS = cell.hpp util.hpp maze.hpp maze_generator.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp aldous_broder.hpp hunt_and_kill.hpp recursive_backtrack.hpp 
 OBJ = maze.o cell.o
-TARGET = test deadend_stats
+TARGET = test stats
 #RM = rm -rf
 RM = rm -rf 
 
@@ -14,8 +14,8 @@ all: $(TARGET)
 test: $(OBJ) test.o
 	$(CC) $(CPPFLAGS) -o $@ $^
 
-deadend_stats: $(OBJ) deadend_stats.o
+stats: $(OBJ) stats.o
 	$(CC) $(CPPFLAGS) -o $@ $^
 
 clean:
-	$(RM) $(OBJ) $(TARGET) deadend_stats.o test.o
+	$(RM) $(OBJ) $(TARGET) stats.o test.o
