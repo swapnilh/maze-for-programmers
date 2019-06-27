@@ -34,6 +34,9 @@ public:
 		while (visited_cells.size() < num_cells) {
 			NOTE("Visited: %lu / %d\n", visited_cells.size(), num_cells);
 			NOTE("Current Cell: {%d,%d}\n", current_cell->row, current_cell->col);
+			#ifdef DEBUG
+			maze_.Display();
+			#endif
 			visited_cells.insert(HashCell(current_cell, num_cols));
 
 			// Is any neighbor unvisited?
