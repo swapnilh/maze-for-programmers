@@ -74,6 +74,25 @@ bool Maze::Link (int row, int col, Direction dir) {
 	return true;
 }
 
+std::vector<Cell*> Maze::GetDeadendCells() {
+	std::vector<Cell*> deadend_list;
+	for (int row = 0; row < num_rows_; row++) {
+		for (int col = 0; col < num_cols_; col++) {
+			auto* cell = cells_[row][col];
+			auto neighbors = cell->GetNeighbors();
+			int links = 0;
+			for (auto* neighbor : neighbors) {
+				if (cell->Linked(neighbor))
+					links++;
+			}
+			if (links == 1) {	
+				deadend_list.push_back(cell);
+			}
+		}
+	}
+	return deadend_list;
+}
+
 void Maze::Reset () {
 	for (int row = 0; row < num_rows_; row++) {
 		for (int col = 0; col < num_cols_; col++) {

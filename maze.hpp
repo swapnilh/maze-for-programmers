@@ -65,6 +65,8 @@ public:
 	// Open the "dir"-side border of the cell at [row, col].
 	bool Link (int row, int col, Direction dir);
 
+	std::vector<Cell*> GetDeadendCells();
+	
 	// Close all walls of the maze.
 	void Reset ();
 
