@@ -24,8 +24,10 @@ public:
 			
 		std::uniform_int_distribution<int> distDir(1,4);
 		
+		int wasted_iterations = 0;
 		// Loop till all cells are visited.
 		while (visited_cells.size() < num_cells) {
+			wasted_iterations++;
 			visited_cells.insert(HashCell(current_cell, num_cols));
 			// Choose a random direction.
 			int rand_dir = distDir(rng_);
@@ -50,6 +52,8 @@ public:
 			if (visited_cells.find(HashCell(next_cell, num_cols))
 					== visited_cells.end()) {
 				current_cell->LinkCell(next_cell);
+			  NOTE ("Wasted Iterations:%d\n", wasted_iterations);	
+				wasted_iterations=0;
 			}
 			current_cell = next_cell;
 		}
