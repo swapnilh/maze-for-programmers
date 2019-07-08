@@ -2,6 +2,7 @@
 #define CELL_HPP
 
 #include <vector>
+#include <unordered_map>
 #include "util.hpp"
 
 struct Cell {
@@ -14,10 +15,7 @@ struct Cell {
 	std::vector<Cell*> links;
 
 	// Neighbors	
-	Cell* north_cell;
-	Cell* south_cell;
-	Cell* east_cell;
-	Cell* west_cell;
+	std::unordered_map<Direction, Cell*, EnumClassHash> neighbors;
 
 	Cell (int row_in, int col_in) : row(row_in), col(col_in), starred(false)
 	 {}
@@ -25,9 +23,23 @@ struct Cell {
 	// Checks whether the cell is linked to this cell.
 	bool Linked (Cell* cell);
 
-	void LinkCell (Cell* cell);
+	// Returns false if neighbor does not exist 
+	bool LinkCell (Direction dir);
 
-	void UnlinkCell (Cell* cell);
+	// Returns false if neighbor does not exist
+	bool UnlinkCell (Direction dir);
+
+	// Returns false if neighbor does not exist 
+	bool LinkCell (Cell* cell);
+
+	// Returns false if neighbor does not exist
+	bool UnlinkCell (Cell* cell);
+
+	// Fails if neighbor exists in direction dir.
+	bool AddNeighbor (Direction dir, Cell* cell);
+	
+	// Fails if no neighbor in direction dir.
+	bool DeleteNeighbor (Direction dir);
 
 	// We need both associative and iterative access to neighbors. 
 	Cell* GetNeighbor (Direction dir);

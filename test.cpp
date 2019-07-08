@@ -26,7 +26,7 @@ int main () {
 		std::cout << "Generating a perfect maze using "
 					  <<  generator->GetName() << " algorithm" << std::endl;
 		generator->Generate();
-		//test_maze.Display();	
+		test_maze.Display();	
 		std::cout << "Deadend Cells:" << test_maze.GetDeadendCells().size()
 						  << std::endl;
 		

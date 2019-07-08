@@ -48,30 +48,12 @@ void Maze::Display() {
 
 bool Maze::Unlink (int row, int col, Direction dir) {
 	Cell* cell = cells_[row][col];
-	Cell* neighbor = cell->GetNeighbor(dir) ;
-	
-	// If neighbor does not exist	
-	if (neighbor == nullptr) {
-		return false;
-	}
-	
-	cell->UnlinkCell(neighbor);
-	
-	return true;
+	return cell->UnlinkCell(dir);
 }
 
 bool Maze::Link (int row, int col, Direction dir) {
 	Cell* cell = cells_[row][col];
-	Cell* neighbor = cell->GetNeighbor(dir) ;
-
-	// If neighbor does not exist	
-	if (neighbor == nullptr) {
-		return false;
-	}
-	
-	cell->LinkCell(neighbor);
-	
-	return true;
+	return cell->LinkCell(dir);
 }
 
 std::vector<Cell*> Maze::GetDeadendCells() {
@@ -98,14 +80,18 @@ void Maze::Reset () {
 		for (int col = 0; col < num_cols_; col++) {
 			auto* cell = cells_[row][col];
 			cell->starred = false;
-			cell->north_cell = (IsInvalid(row+1, col))? nullptr: cells_[row+1][col];
-			cell->east_cell =  (IsInvalid(row, col+1))? nullptr : cells_[row][col+1];
-			cell->west_cell =  (IsInvalid(row, col-1))? nullptr : cells_[row][col-1];
-			cell->south_cell = (IsInvalid(row-1, col))? nullptr : cells_[row-1][col];
-			cell->UnlinkCell(cell->north_cell);
-			cell->UnlinkCell(cell->east_cell);
-			cell->UnlinkCell(cell->west_cell);
-			cell->UnlinkCell(cell->south_cell);
+			if (!IsInvalid(row+1, col))
+						cell->AddNeighbor(Direction::North, cells_[row+1][col]);
+			if (!IsInvalid(row-1, col))
+						cell->AddNeighbor(Direction::South, cells_[row-1][col]);
+			if (!IsInvalid(row, col+1))
+						cell->AddNeighbor(Direction::East, cells_[row][col+1]);
+			if (!IsInvalid(row, col-1))
+						cell->AddNeighbor(Direction::West, cells_[row][col-1]);
+			cell->UnlinkCell(Direction::North);
+			cell->UnlinkCell(Direction::East);
+			cell->UnlinkCell(Direction::West);
+			cell->UnlinkCell(Direction::South);
 		}
 	}
 }

@@ -93,7 +93,7 @@ public:
 						continue;
 					}
 					// Choose a random direction.
-					int rand_dir = 5; // Bigger than 4, max number of visited neighbors.
+					int rand_dir = 4; // Bigger than 0-3, max number of visited neighbors.
 					do {
 						rand_dir = distDir(rng_);
 					} while (rand_dir >= visited_neighbors);

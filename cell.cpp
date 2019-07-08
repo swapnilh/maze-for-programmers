@@ -11,41 +11,76 @@ bool Cell::Linked (Cell* cell) {
 	return false;
 }
 
-void Cell::LinkCell (Cell* cell) {
-	// Already linked
-	if (Linked(cell))
-		return;
-	links.push_back(cell);
-	cell->LinkCell(this);
+bool Cell::LinkCell (Direction dir) {
+	auto idx = neighbors.find(dir);
+	
+	// No such neighbor
+	if (idx == neighbors.end()) {
+		return false;
+	}
+	
+	auto* cell = idx->second;	
+	return LinkCell(cell);
 }
 
-void Cell::UnlinkCell (Cell* cell) {
+bool Cell::UnlinkCell (Direction dir) {
+	auto idx = neighbors.find(dir);
+	
+	// No such neighbor
+	if (idx == neighbors.end()) {
+		return false;
+	}
+
+	auto* cell = idx->second;	
+	return UnlinkCell(cell);	
+}
+
+bool Cell::LinkCell (Cell* cell) {
+	if (cell == nullptr)
+	return false;
+
+	// Already linked
+	if (!Linked(cell)) {
+		links.push_back(cell);
+		cell->LinkCell(this);
+	}
+	return true;
+}
+
+bool Cell::UnlinkCell (Cell* cell) {
+	if (cell == nullptr)
+	return false;
+
 	for (auto it = links.begin(); it != links.end(); it++) {
 		if (*it == cell) {
 			links.erase(it);
 			cell->UnlinkCell(this);
-			break;
+			return true;
 		}
 	}
+	return false;
+}
+
+bool Cell::AddNeighbor (Direction dir, Cell* cell) {
+	if (neighbors.find(dir) != neighbors.end()) {
+		return false;
+	}
+	neighbors[dir] = cell;
+	return true;
+}
+
+bool Cell::DeleteNeighbor (Direction dir) {
+	auto neighbor = neighbors.find(dir);
+	if (neighbor == neighbors.end())	return false;
+	neighbors.erase(neighbor);
+	return true;
 }
 
 // We need both associative and iterative access to neighbors. 
 Cell* Cell::GetNeighbor(Direction dir) {
-	switch (dir) {
-		case Direction::North:
-			return north_cell;
-			break;
-		case Direction::East:
-			return east_cell;
-			break;
-		case Direction::West:
-			return west_cell;
-			break;
-		case Direction::South:
-			return south_cell;
-			break;
-	}
-	return nullptr;
+	auto neighbor = neighbors.find(dir);
+	if (neighbor == neighbors.end())	return nullptr;
+	return neighbor->second;
 }
 
 std::vector<Cell*> Cell::GetNeighbors () {
@@ -61,9 +96,11 @@ void Cell::PrintCell(bool print_neighbors) {
 	std::cout << "CELL:: {" << row << "," << col << "}";
 	if (print_neighbors) {
 		std::cout << " N,E,W,S:";
-		auto neighbors = GetNeighbors();
-		for (auto* cell : neighbors)
-			cell->PrintCell(false);
+		auto neighbor_list = GetNeighbors();
+		for (auto* cell : neighbor_list) {
+			if (cell != nullptr)
+				cell->PrintCell(false);
+		}
 		std::cout << std::endl;
 	}
 }

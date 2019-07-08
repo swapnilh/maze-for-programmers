@@ -22,7 +22,7 @@ public:
 
 		std::unordered_set <int> visited_cells;
 			
-		std::uniform_int_distribution<int> distDir(1,4);
+		std::uniform_int_distribution<int> distDir(0,3);
 		
 		int wasted_iterations = 0;
 		// Loop till all cells are visited.
@@ -31,27 +31,13 @@ public:
 			visited_cells.insert(HashCell(current_cell, num_cols));
 			// Choose a random direction.
 			int rand_dir = distDir(rng_);
-			Cell* next_cell = nullptr;
-			switch (rand_dir) {
-				case 1:
-					next_cell = current_cell->GetNeighbor(Direction::North);
-					break;
-				case 2:
-					next_cell = current_cell->GetNeighbor(Direction::East);
-					break;
-				case 3:
-					next_cell = current_cell->GetNeighbor(Direction::West);
-					break;
-				case 4:
-					next_cell = current_cell->GetNeighbor(Direction::South);
-					break;
-			}
+			Cell* next_cell = current_cell->GetNeighbor(IntToDirection(rand_dir));
 			if (next_cell == nullptr)	continue;
 			
 			// If not visited before, link the two cells.
 			if (visited_cells.find(HashCell(next_cell, num_cols))
 					== visited_cells.end()) {
-				current_cell->LinkCell(next_cell);
+				current_cell->LinkCell(IntToDirection(rand_dir));
 			  NOTE ("Wasted Iterations:%d\n", wasted_iterations);	
 				wasted_iterations=0;
 			}
