@@ -1,5 +1,5 @@
 CC = g++
-CPPFLAGS = -Wall -std=c++11 -ggdb -O0# -DDEBUG 
+CPPFLAGS = -Wall -std=c++11 -ggdb -O3# -DDEBUG 
 DEPS = cell.hpp util.hpp maze.hpp maze_generator.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp aldous_broder.hpp hunt_and_kill.hpp recursive_backtrack.hpp 
 OBJ = maze.o cell.o util.o
 TARGET = test stats
