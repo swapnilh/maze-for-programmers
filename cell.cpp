@@ -66,6 +66,7 @@ bool Cell::AddNeighbor (Direction dir, Cell* cell) {
 		return false;
 	}
 	neighbors[dir] = cell;
+  cell->AddNeighbor(InvertDirection(dir), this);	
 	return true;
 }
 
@@ -73,6 +74,7 @@ bool Cell::DeleteNeighbor (Direction dir) {
 	auto neighbor = neighbors.find(dir);
 	if (neighbor == neighbors.end())	return false;
 	neighbors.erase(neighbor);
+  neighbor->second->DeleteNeighbor(InvertDirection(dir));	
 	return true;
 }
 
