@@ -1,8 +1,8 @@
 CC = g++
-CPPFLAGS = -Wall -std=c++11 -ggdb -O3# -DDEBUG 
+CPPFLAGS = -Wall -std=c++11 -ggdb -O3 # -DDEBUG 
 DEPS = cell.hpp util.hpp maze.hpp maze_generator.hpp binary_tree.hpp sidewinder.hpp dijkstra.hpp aldous_broder.hpp hunt_and_kill.hpp recursive_backtrack.hpp 
 OBJ = maze.o cell.o util.o
-TARGET = test stats
+TARGET = test stats mask
 #RM = rm -rf
 RM = rm -rf 
 
@@ -15,6 +15,9 @@ test: $(OBJ) test.o
 	$(CC) $(CPPFLAGS) -o $@ $^
 
 stats: $(OBJ) stats.o
+	$(CC) $(CPPFLAGS) -o $@ $^
+
+mask: $(OBJ) mask.o
 	$(CC) $(CPPFLAGS) -o $@ $^
 
 clean:
