@@ -11,7 +11,7 @@ public:
 		{}
 
 	void Generate() override {
-		unsigned int num_cells = maze_.GetNumRows() * maze_.GetNumCols();
+		unsigned int num_cells = maze_.GetNumCells();
 		int num_cols = maze_.GetNumCols();
 
 		// Pick a random starting cell.
@@ -32,11 +32,16 @@ public:
 			// Choose a random direction.
 			int rand_dir = distDir(rng_);
 			Cell* next_cell = current_cell->GetNeighbor(IntToDirection(rand_dir));
+			NOTE("Current cell: {%d,%d}!\n", current_cell->row,
+					current_cell->col);
 			if (next_cell == nullptr)	continue;
+			NOTE("Next cell: {%d,%d}!\n", next_cell->row,
+					next_cell->col);
 			
 			// If not visited before, link the two cells.
 			if (visited_cells.find(HashCell(next_cell, num_cols))
 					== visited_cells.end()) {
+				NOTE("Linking current and next cells!\n");
 				current_cell->LinkCell(IntToDirection(rand_dir));
 			  NOTE ("Wasted Iterations:%d\n", wasted_iterations);	
 				wasted_iterations=0;

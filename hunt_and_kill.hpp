@@ -12,7 +12,7 @@ public:
 		{}
 
 	void Generate() override {
-		unsigned int num_cells = maze_.GetNumRows() * maze_.GetNumCols();
+		unsigned int num_cells = maze_.GetNumCells();
 		int num_cols = maze_.GetNumCols();
 
 		// Pick a random starting cell.
