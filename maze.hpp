@@ -1,8 +1,8 @@
 #ifndef MAZE_HPP
 #define MAZE_HPP
 
-#include<vector>
-#include<unordered_set>
+#include <vector>
+#include <unordered_set>
 #include "cell.hpp"
 
 // The M x N maze is represented as 2M+1 x 2N+1 as walls are stored as cells.
@@ -13,11 +13,12 @@ class Maze {
 	// and does not include the count of walls.
   int num_rows_;
   int num_cols_;
-
-  // true = closed, false = open.
-  // odd indices cannot be closed as they are real cells. 
-  // TODO: store only walls and not cells.
+	
+	// 2D vector storing cells in the grid.
   std::vector<std::vector<Cell*> > cells_; 
+
+	// Stores list of cells masked out.
+	std::unordered_set<int> masked_cells_;
 
 public:
   Maze(int num_rows, int num_cols) :
@@ -38,6 +39,11 @@ public:
 	// Returns the number of cols
 	int GetNumCols () {
 		return num_cols_;
+	}
+
+	// Returns the number of unmasked cells
+	int GetNumCells () {
+		return num_cols_*num_rows_ - masked_cells_.size();
 	}
 
 	Cell* const GetCell (int row, int col) {
@@ -64,6 +70,12 @@ public:
 
 	// Open the "dir"-side border of the cell at [row, col].
 	bool Link (int row, int col, Direction dir);
+
+	// Masks cell at [row, col] if valid, else return false.
+	bool Mask (int row, int col);
+
+	// Unmasks cell at [row, col] if valid, else return false.
+	bool Unmask (int row, int col);
 
 	std::vector<Cell*> GetDeadendCells();
 	
